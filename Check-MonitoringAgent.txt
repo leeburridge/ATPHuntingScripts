@@ -1,0 +1,55 @@
+DeviceInfo
+| where OnboardingStatus == "Onboarded"
+| where isnotempty(OSPlatform)
+| distinct DeviceId, MachineGroup, OSPlatform, OSArchitecture
+| join kind=inner (
+    DeviceProcessEvents
+    | where InitiatingProcessFileName == "MonitoringHost.exe"
+    | where InitiatingProcessSHA1 != ""
+    | extend MMAVersion = case(
+    InitiatingProcessSHA1 has ("476081C9BC509AE6BC1CD90348C5357FA1F3CC8E"), "10.20.18069,Compliant",
+    InitiatingProcessSHA1 has ("53e805edd93db58deea23b87eca8dd5cf8bec61f"), "10.20.18067,Compliant",
+    InitiatingProcessSHA1 has ("9df440105993a40938cab2cfc20e00206050edee"), "10.20.18064,Compliant",
+    InitiatingProcessSHA1 has ("9713ff19279c01ef0674f4149a8fbc4a8519c671"), "10.20.18062,Compliant", 
+    InitiatingProcessSHA1 has ("2508dad57312173e88d22b0ccb68726f50ea0e2a"), "10.20.18056,Compliant",
+    InitiatingProcessSHA1 has ("b2dd6f7c38e08344dc8ffa44f4ce8c29e4dc6d9f"), "10.20.18053,Compliant",
+    InitiatingProcessSHA1 has ("63441491ba3709d55b8801265d898edda38bfcae"), "10.20.18053,Compliant",
+    InitiatingProcessSHA1 has ("9e2dcac6aeccd618304d373c3e2d5af0a9f59421"), "10.20.18049,Non-compliant",
+    InitiatingProcessSHA1 has ("f621beaaacbcee09d5e2c037fe4b93145edf677e"), "10.20.18040,Non-compliant",
+    InitiatingProcessSHA1 has ("c541f9d57c09c87ab4901c51602f6d466e09781f"), "10.20.18038,Non-compliant",
+    InitiatingProcessSHA1 has ("3603f260d52c62962ed3ec902e0b7122585ecee9"), "10.20.18029,Non-compliant",
+    InitiatingProcessSHA1 has ("113ef00207692c8f9c575f14c3109a78a7dbe6b8"), "10.20.18018,Non-compliant",
+    InitiatingProcessSHA1 has ("ec7da62769bb05b7fbc15c67601813cf053dcff1"), "10.20.18011,Non-compliant",
+    InitiatingProcessSHA1 has ("3b57539cb6fcfdaf7e10eee46240a404df1fb1ab"), "10.20.18001,Non-compliant",
+    InitiatingProcessSHA1 has ("25158c85889aecf3406fef741b08a64ca3b39073"), "10.19.13515,Non-compliant",
+    InitiatingProcessSHA1 has ("de698f5161a4a93ceb16719b98ddcef97113b0dc"), "10.19.10200,Non-compliant",
+    InitiatingProcessSHA1 has ("ea4d20994dcf71a1f9fd9b59b92b8a6c2c8e68ab"), "10.19.10177,Non-compliant",
+    InitiatingProcessSHA1 has ("a499b163138e882b6440f0a31b36e7ffaf515597"), "10.19.10014,Non-compliant",
+    InitiatingProcessSHA1 has ("d97f5f336628d2d7c7a0860086aae8a7895fe09c"), "10.19.10006,Non-compliant",
+    InitiatingProcessSHA1 has ("05e5a781b55265ad5a55c8e84b8142bd9c56e1bd"), "10.19.10006,Non-compliant",
+    InitiatingProcessSHA1 has ("227fffb434c6f1f10614b12a3139ed51c492dcb6"), "8.0.13053,Non-compliant",
+    InitiatingProcessSHA1 has ("6d455aad1244c2d38b5257912756a1570d927516"), "8.0.13053,Non-compliant",
+    InitiatingProcessSHA1 has ("651ebf94d7c6120bd45a917a06a391e53534993e"), "8.0.11136,Non-compliant",
+    InitiatingProcessSHA1 has ("ef6204ae26f2aab0fe3a89991a6c97b71a17f231"), "8.0.11136,Non-compliant",
+    InitiatingProcessSHA1 has ("9eab7e74fe1d8dbd4346a1d7566df0c4b8521613"), "8.0.11103,Non-compliant",
+    InitiatingProcessSHA1 has ("97d537c4015bc561eb4f2c70cdec0fbab41dec5f"), "8.0.11103,Non-compliant",
+    InitiatingProcessSHA1 has ("ddbe499dfa696a5a2bbf46248fff5e0c98df9e01"), "8.0.11081,Non-compliant",
+    InitiatingProcessSHA1 has ("d6c7667df1e099dfcd2d5739c56c3481f7b4fbf1"), "8.0.11072,Non-compliant",
+    InitiatingProcessSHA1 has ("5e0a76cb7a41f081d572d04151691d8a5cc2f3b5"), "8.0.11049,Non-compliant",
+    InitiatingProcessSHA1 has ("8ab0c4450571552a906448d5499174f6eebc664c"), "8.0.11030,Non-compliant",
+    InitiatingProcessSHA1 has ("3cfead2c7c204f481d60f13332bd7f9addf74c34"), "8.0.10918,Non-compliant",
+    InitiatingProcessSHA1 has ("a37e5b977152ef176bd65c037fabe1bdd3992476"), "7.2.10375,Non-compliant",
+    InitiatingProcessSHA1 has ("36fb1f884c0eb0ecf8be72c131e809861d2b579a"), "7.1.10305,Non-compliant",
+    InitiatingProcessSHA1 has ("97933530ef2b64db121ed02601464fc6740ceb64"), "7.1.10302,Non-compliant",
+    InitiatingProcessSHA1 has ("47b48cb6c23aceeb83203ca372a05fada5831167"), "7.1.10292,Non-compliant",
+    InitiatingProcessSHA1 has ("d89f344be6b9344b333ea0faab7f49be3f66112e"), "7.1.10285,Non-compliant", 
+    InitiatingProcessSHA1 has ("41e3860179cd5579d9b83a5d8806d1b44096a2d2"), "7.1.10268.0,Non-compliant",
+    InitiatingProcessSHA1 has ("d3772d7cc22fc990ada420334435f766a2b4ed65"), "7.1.10184,Non-compliant",
+    InitiatingProcessSHA1 has ("b5d5010abad70a4eac2268e133b27bbb5fcaf919"), "6.1.7221,Non-compliant", 
+    "Unknown MMA Version - check SHA1")
+| extend compliance = tostring(parse_csv(MMAVersion)[1])
+| extend MMAVersion = tostring(parse_csv(MMAVersion)[0])
+| distinct DeviceId, DeviceName, InitiatingProcessSHA1, MMAVersion, compliance
+) on DeviceId
+| summarize arg_max(MMAVersion, InitiatingProcessSHA1) by MachineGroup, OSPlatform, compliance, DeviceName
+| project-away InitiatingProcessSHA1
